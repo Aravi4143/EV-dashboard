@@ -8,7 +8,6 @@ const port = process.env.HOST_PORT || 3000;
 app.get('/api/data', async (req, res) => {
   try {
     const vehicles = await handleVehicleRequest(req);
-    console.log(vehicles);
     res.json(vehicles);
   } catch (error) {
     console.error(error);
@@ -20,7 +19,6 @@ app.get('/api/data', async (req, res) => {
 app.get('/api/data/filtered', async (req, res) => {
   try {
     const vehicles = await handleFilteredVehicleRequest(req);
-    console.log(vehicles);
     res.json(vehicles);
 } catch (error) {
   console.error(error);

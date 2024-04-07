@@ -8,7 +8,7 @@ import RenderChart from './charts';
 
 export default function ReportsDashboard() {
   const [reportType, setReportType] = useState('total-miles-driven');
-  const [frequency, setFrequency] = useState('daily');
+  const [frequency, setFrequency] = useState('weekly');
   const [startDate, setStartDate] = useState<Date | null>(new Date(new Date().setDate(new Date().getDate() - 90))); // Set default to last three months
   const [endDate, setEndDate] = useState<Date | null>(new Date());
   const [data, setData] = useState<any>([]);
