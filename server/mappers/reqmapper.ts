@@ -1,14 +1,14 @@
 import { filteredQueryMapper, queryMapper } from "./querymapper";
 import { query } from "../handlers/db";
 
-export async function handleVehicleRequest(req: any) {    
+export async function handleVehicleRequest(req: any) {
     try {
         let { searchQuery, currentPage, count } = req.query as {
             searchQuery?: string;
             currentPage?: number;
             count?: boolean;
         }
-    
+
         if (!searchQuery) {
             searchQuery = "";
         }
@@ -18,7 +18,7 @@ export async function handleVehicleRequest(req: any) {
         if (!count) {
             count = false;
         }
-    
+
         const customQuery = await queryMapper(searchQuery, currentPage, count);
         const entries = await query(customQuery, []);
         return entries.rows;
@@ -28,7 +28,7 @@ export async function handleVehicleRequest(req: any) {
     }
 }
 
-export default async function handleFilteredVehicleRequest(req: any) {
+export async function handleFilteredVehicleRequest(req: any) {
     try {
         let { reportType, frequency, startDate, endDate } = req.query as {
             reportType?: string;
@@ -36,15 +36,15 @@ export default async function handleFilteredVehicleRequest(req: any) {
             startDate?: string;
             endDate?: string;
         };
-    
+
         if (!reportType) {
-            reportType = "all";
+            reportType = "total-miles-driven";
         }
         if (!frequency) {
             frequency = "weekly";
         }
-        [startDate, endDate]  = [...parseDates(startDate, endDate)];
-    
+        [startDate, endDate] = [...parseDates(startDate, endDate)];
+
         const customQuery = await filteredQueryMapper(reportType, frequency, startDate, endDate);
         const entries = await query(customQuery, []);
         return entries.rows;
@@ -65,7 +65,7 @@ function parseDates(startDate: string | undefined, endDate: string | undefined) 
     return [startDate, endDate];
 }
 
-function getCustomDate(date : string, days : number = 7): string {
+function getCustomDate(date: string, days: number = 7): string {
     const parsedDate = new Date(date);
     parsedDate.setDate(parsedDate.getDate() + days);
     return parsedDate.toISOString();

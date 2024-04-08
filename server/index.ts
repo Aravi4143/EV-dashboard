@@ -1,5 +1,5 @@
-import * as express from "express";
-import handleFilteredVehicleRequest, { handleVehicleRequest } from "./mappers/reqmapper";
+import express from "express";
+import { handleVehicleRequest, handleFilteredVehicleRequest } from "./mappers/reqmapper";
 
 const app = express();
 const port = process.env.HOST_PORT || 3000;
@@ -26,6 +26,10 @@ app.get('/api/data/filtered', async (req, res) => {
 }
 });
 
-app.listen(port, () => {
-  console.log(`Listening on ${process.env.HOST_URL}:${port}`);
-});
+if (process.env.NODE_ENV !== 'test') {
+  app.listen(port, () => {
+    console.log(`Listening on ${process.env.HOST_URL}:${port}`);
+  });
+}
+
+export default app;
