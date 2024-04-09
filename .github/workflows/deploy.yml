@@ -40,5 +40,5 @@ jobs:
         uses: denoland/deployctl@v1
         with:
           project: "aravindgran-ev-dashboar-57"
-          entrypoint: "/dist/index.js"
-          root: "/server"
+          entrypoint: "dist/index.js"
+          root: "server"
