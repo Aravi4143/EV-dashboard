@@ -21,7 +21,7 @@ export default async function Page({
       <div className="mt-4 flex justify-center">
         <div className="w-1/2"><Search placeholder="Search..." /></div>
       </div>
-      <Suspense key={query + currentPage}>
+      <Suspense key={query + currentPage} fallback={null}>
         <VehiclesTable query={query} currentPage={currentPage} />
       </Suspense>
       <div className="flex w-full justify-center bg-gray-200 shadow shadow-gray-300 p-4">

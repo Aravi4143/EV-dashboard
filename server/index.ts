@@ -11,7 +11,7 @@ app.get('/api/data', async (req, res) => {
     res.json(vehicles);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: error?.message || 'Error fetching vehicles', stacktrace: error?.stacktrace });
+    res.status(500).json({ message: error?.message || 'Error fetching vehicles', stacktrace: error?.stack });
   }
 });
 

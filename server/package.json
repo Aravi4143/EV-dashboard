@@ -6,6 +6,8 @@
   "scripts": {
     "build": "tsc",
     "start": "ts-node ./dist/index.js",
+    "dev": "nodemon --watch 'src/**/*.ts' --exec 'npm run build && ts-node ./dist/index.js'",
+    "test": "jest",
     "lint": "npx eslint **/*.ts"
   },
   "keywords": [],

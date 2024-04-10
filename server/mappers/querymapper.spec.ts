@@ -28,4 +28,26 @@ describe('filteredQueryMapper', () => {
         const result = await filteredQueryMapper('most-driven-vehicles', 'yearly', '2023-01-01', '2023-12-31');
         expect(result).toEqual(`SELECT\n            'most-driven-vehicles' AS reportType,\n            'yearly' AS frequency,\n            date_trunc('year', date_added) AS date,\n            vin,\n            SUM(miles_driven) AS value\n            FROM vehicles\n            WHERE date_added >= TO_TIMESTAMP('2023-01-01', 'YYYY-MM-DD"T"HH24:MI:SS"Z"') AND date_added <= TO_TIMESTAMP('2023-12-31', 'YYYY-MM-DD"T"HH24:MI:SS"Z"')\n            GROUP BY date_trunc('year', date_added), vin\n            ORDER BY value DESC;`);
     });
+
+    it('should return a least driven vehicles query', async () => {
+        const result = await filteredQueryMapper('least-driven-vehicles', 'yearly', '2023-01-01', '2023-12-31');
+        expect(result).toEqual(`SELECT\n            'least-driven-vehicles' AS reportType,\n            'yearly' AS frequency,\n            date_trunc('year', date_added) AS date,\n            vin,\n            SUM(miles_driven) AS value\n            FROM vehicles\n            WHERE date_added >= TO_TIMESTAMP('2023-01-01', 'YYYY-MM-DD"T"HH24:MI:SS"Z"') AND date_added <= TO_TIMESTAMP('2023-12-31', 'YYYY-MM-DD"T"HH24:MI:SS"Z"')\n            GROUP BY date_trunc('year', date_added), vin\n            ORDER BY value ASC;`);
+    });
+
+    it('should return miles driven by vehicles type query', async () => {
+        const result = await filteredQueryMapper('miles-driven-by-type', 'yearly', '2023-01-01', '2023-12-31');
+        expect(result).toEqual(`SELECT\n            'miles-driven-by-type' AS reportType,\n            'yearly' AS frequency,\n            date_trunc('year', date_added) AS date,\n            type,\n            SUM(miles_driven) AS value\n            FROM vehicles\n            WHERE date_added >= TO_TIMESTAMP('2023-01-01', 'YYYY-MM-DD"T"HH24:MI:SS"Z"') AND date_added <= TO_TIMESTAMP('2023-12-31', 'YYYY-MM-DD"T"HH24:MI:SS"Z"')\n            GROUP BY date_trunc('year', date_added), type\n            ORDER BY value DESC;`);
+    });
+
+    it('should return error for invalid report type', async () => {
+        let thrownError;
+        try {
+            const result = await filteredQueryMapper('miles-driven-vs-type', 'yearly', '2023-01-01', '2023-12-31');
+        } catch (error) {
+            thrownError = error;
+        }
+        
+        expect(thrownError).toBeInstanceOf(Error);
+        expect(thrownError.message).toEqual('Requested report not available yet!!!');
+    });
 });

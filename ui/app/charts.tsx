@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react';
+import React from 'react';
 import { BarChart, Bar, LineChart, Line, XAxis, YAxis, Tooltip, CartesianGrid, Legend } from 'recharts';
 
 export default function RenderChart(data: any) {
@@ -26,11 +26,10 @@ export default function RenderChart(data: any) {
   };
 
   return (
-    <Suspense fallback={null}>
     <div>
 
       {reportType === 'total-miles-driven' || reportType === 'average-miles-driven' ? (
-        <LineChart width={window.innerWidth - 350} height={850} data={data} margin={{ top: 5, right: 20, bottom: 5, left: 0 }}>
+        <LineChart width={window.innerWidth - 350} height={815} data={data} margin={{ top: 5, right: 20, bottom: 5, left: 0 }}>
           <Line type="monotone" dataKey="value" stroke='#800080' />
           <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
           <XAxis dataKey="date" tickFormatter={(date) => new Date(date).toLocaleDateString() || 'Date'} />
@@ -40,7 +39,7 @@ export default function RenderChart(data: any) {
         </LineChart>
 
       ) : (
-        <BarChart width={window.innerWidth - 350} height={600} data={data}>
+        <BarChart width={window.innerWidth - 350} height={815} data={data}>
           {reportType === 'miles-driven-by-type'
             ? (<XAxis dataKey="type" tickFormatter={(type) => type || 'Vehicle Type'} />)
             : (<XAxis dataKey="vin" tickFormatter={(vin) => vin || 'Value'} />)} {/* Format x-axis for types or value */}
@@ -51,6 +50,5 @@ export default function RenderChart(data: any) {
         </BarChart>
       )}
     </div>
-    </Suspense>
   );
 };

@@ -41,14 +41,18 @@ const vehicleResponse = {
 
 jest.mock("./mappers/querymapper", () => ({
     queryMapper: jest.fn().mockImplementation((searchQuery, currentPage, count) => {
-        if(count === '1') {
+        if (count === '1') {
             return Promise.reject(new Error('Something went wrong'));
+        } else if (count === '2') {
+            return Promise.reject(new Error(undefined));
         }
         return Promise.resolve(null);
     }),
     filteredQueryMapper: jest.fn().mockImplementation((reportType, frequency, startDate, endDate) => {
         if(reportType === 'test') {
             return Promise.reject(new Error('Requested report not available yet!!!'));
+        } else if(reportType === 'def') {
+            return Promise.reject(new Error(undefined));
         }
         return Promise.resolve("");
 })
@@ -84,6 +88,12 @@ describe('GET /api/data', () => {
         expect(res.status).toBe(500);
         expect(res.body?.message).toEqual('Something went wrong');
       });
+    
+      test('should handle default error for all vehicle data', async () => {
+        const res = await request(app).get('/api/data?count=2');
+        expect(res.status).toBe(500);
+        expect(res.body?.message).toEqual('Error fetching vehicles');
+      });
 });
 
 describe('GET /api/data/filtered', () => {
@@ -106,5 +116,11 @@ describe('GET /api/data/filtered', () => {
         const res = await request(app).get('/api/data/filtered?reportType=test');
         expect(res.status).toBe(500);
         expect(res.body?.message).toEqual('Requested report not available yet!!!');
+      });
+
+      test('should handle errors for all vehicle data', async () => {
+        const res = await request(app).get('/api/data/filtered?reportType=def');
+        expect(res.status).toBe(500);
+        expect(res.body?.message).toEqual('Error fetching filtered vehicles');
       });
 });
